@@ -1,4 +1,6 @@
-import { formatBibTeX } from '../lib/bibtex';
+import { formatBibTeX, BibData } from '../lib/bibtex';
+import { formatTime } from '../lib/time';
+import { createMiniToggle } from './miniToggle';
 
 function createButton() {
   const btn = document.createElement('button');
@@ -17,7 +19,7 @@ function createButton() {
   return btn;
 }
 
-function getBibData() {
+function getBibData(): BibData {
   const titleMeta = document.querySelector('meta[name="title"]') as HTMLMetaElement | null;
   const title = titleMeta?.content || document.title.replace(/ - YouTube$/, '');
 
@@ -30,10 +32,21 @@ function getBibData() {
   return { title, channel, year, url: location.href };
 }
 
-function main() {
+async function main() {
+  const toggle = await createMiniToggle();
   const btn = createButton();
   btn.addEventListener('click', () => {
     const data = getBibData();
+    if (toggle.checked) {
+      const video = document.querySelector('video') as HTMLVideoElement | null;
+      if (video) {
+        const sec = Math.floor(video.currentTime);
+        const url = new URL(data.url);
+        url.searchParams.set('t', `${sec}s`);
+        data.url = url.toString();
+        data.note = `Time = ${formatTime(sec)}`;
+      }
+    }
     const entry = formatBibTeX(data);
     navigator.clipboard.writeText(entry).then(() => {
       alert('Copied!');
