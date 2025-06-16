@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "BibTube",
+  "description": "Copy BibTeX for YouTube videos",
+  "version": "0.1.0",
+  "permissions": ["activeTab", "clipboardWrite"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch*"] ,
+      "js": ["injectButton.js"]
+    }
+  ]
+}
