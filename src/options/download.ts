@@ -1,7 +1,5 @@
 import { list } from '../history/historyManager';
 
-declare const chrome: any;
-
 const btn = document.getElementById('download') as HTMLButtonElement;
 
 btn.addEventListener('click', async () => {

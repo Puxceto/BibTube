@@ -6,20 +6,39 @@ import { push as pushHistory } from '../history/historyManager';
 
 declare const chrome: any;
 
+function injectStyles() {
+  if (document.getElementById('bibtube-style')) return;
+  const style = document.createElement('style');
+  style.id = 'bibtube-style';
+  style.textContent = `
+    .bibtube-btn {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 1000;
+      padding: 6px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #cc0000;
+      color: #fff;
+    }
+    @media (prefers-color-scheme: dark) {
+      .bibtube-btn {
+        background: #ff4e45;
+        color: #fff;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function createButton() {
+  injectStyles();
   const btn = document.createElement('button');
   btn.textContent = 'Copy BibTeX';
   btn.title = 'Generate BibTeX entry';
-  btn.style.position = 'fixed';
-  btn.style.top = '80px';
-  btn.style.right = '20px';
-  btn.style.zIndex = '1000';
-  btn.style.padding = '6px 8px';
-  btn.style.background = '#cc0000';
-  btn.style.color = '#fff';
-  btn.style.border = 'none';
-  btn.style.borderRadius = '4px';
-  btn.style.cursor = 'pointer';
+  btn.className = 'bibtube-btn';
   return btn;
 }
 
@@ -54,26 +73,31 @@ function getFormatOptions(): Promise<FormatOptions> {
 async function main() {
   const toggle = await createMiniToggle();
   const btn = createButton();
-  btn.addEventListener('click', async () => {
-    const data = getBibData();
-    if (toggle.checked) {
-      const video = document.querySelector('video') as HTMLVideoElement | null;
-      if (video) {
-        const sec = Math.floor(video.currentTime);
-        const url = new URL(data.url);
-        url.searchParams.set('t', `${sec}s`);
-        data.url = url.toString();
-        data.note = `Time = ${formatTime(sec)}`;
-      }
-    }
-    const opts = await getFormatOptions();
-    const entry = formatBibTeX(data, opts);
-    await pushHistory(entry);
-    navigator.clipboard.writeText(entry).then(() => {
-      showToast('Copied!');
-    });
+  btn.addEventListener('click', () => copyBib(toggle));
+  chrome.runtime?.onMessage?.addListener((msg: any) => {
+    if (msg.action === 'copy-bib') copyBib(toggle);
   });
   document.body.appendChild(btn);
+}
+
+async function copyBib(toggle: HTMLInputElement) {
+  const data = getBibData();
+  if (toggle.checked) {
+    const video = document.querySelector('video') as HTMLVideoElement | null;
+    if (video) {
+      const sec = Math.floor(video.currentTime);
+      const url = new URL(data.url);
+      url.searchParams.set('t', `${sec}s`);
+      data.url = url.toString();
+      data.note = `Time = ${formatTime(sec)}`;
+    }
+  }
+  const opts = await getFormatOptions();
+  const entry = formatBibTeX(data, opts);
+  await pushHistory(entry);
+  navigator.clipboard.writeText(entry).then(() => {
+    showToast('Copied!');
+  });
 }
 
 main();

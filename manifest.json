@@ -17,6 +17,17 @@
       ]
     }
   ],
+  "background": {
+    "service_worker": "serviceWorker.js"
+  },
+  "commands": {
+    "copy-bib": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Copy BibTeX entry"
+    }
+  },
   "action": {
     "default_popup": "options/popup.html"
   }

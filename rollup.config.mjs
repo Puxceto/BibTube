@@ -36,5 +36,14 @@ export default [
       sourcemap: false
     },
     plugins: [typescript({ target: 'ES2022', rootDir: 'src', outDir: 'dist' })]
+  },
+  {
+    input: 'src/serviceWorker.ts',
+    output: {
+      file: 'dist/serviceWorker.js',
+      format: 'iife',
+      sourcemap: false
+    },
+    plugins: [typescript({ target: 'ES2022', rootDir: 'src', outDir: 'dist' })]
   }
 ];

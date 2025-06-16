@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "BibTeX generator for YouTube watch pages",
   "scripts": {
-    "clean": "rm -rf dist extension.zip",
-    "build": "npm run clean && rollup -c && cp manifest.json LICENSE dist/ && cp -r src/options/popup.html dist/options/ && (cd dist && zip -r bibtube.zip .)",
+    "clean": "rm -rf dist bibtubegrabber.zip",
+    "build": "npm run clean && rollup -c && cp manifest.json LICENSE dist/ && cp -r src/options/popup.html dist/options/ && (cd dist && zip -r bibtubegrabber.zip .) && mv dist/bibtubegrabber.zip .",
     "test": "jest"
   },
   "devDependencies": {
@@ -16,6 +16,9 @@
     "rollup": "^4.16.7",
     "ts-jest": "^29.4.0",
     "tslib": "^2.8.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0"
   }
 }
