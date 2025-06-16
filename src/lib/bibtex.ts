@@ -3,6 +3,7 @@ export interface BibData {
   channel: string;
   year: number;
   url: string;
+  note?: string;
 }
 
 const latexMap: Record<string, string> = {
@@ -24,10 +25,14 @@ export function escapeLaTeX(str: string): string {
 
 export function formatBibTeX(data: BibData): string {
   const key = data.title.toLowerCase().replace(/\W+/g, '-').slice(0, 20) || 'video';
-  return `@online{${key},\n` +
+  let entry = `@online{${key},\n` +
     `  title = {${escapeLaTeX(data.title)}},\n` +
     `  year = {${data.year}},\n` +
     `  url = {${data.url}},\n` +
-    `  author = {${escapeLaTeX(data.channel)}}\n` +
-    `}`;
+    `  author = {${escapeLaTeX(data.channel)}}`;
+  if (data.note) {
+    entry += `,\n  note = {${escapeLaTeX(data.note)}}`;
+  }
+  entry += `\n}`;
+  return entry;
 }
