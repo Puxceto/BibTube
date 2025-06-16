@@ -1,0 +1,15 @@
+{
+  "name": "bibtube-extension",
+  "version": "0.1.0",
+  "description": "BibTeX generator for YouTube watch pages",
+  "scripts": {
+    "clean": "rm -rf dist extension.zip",
+    "build": "npm run clean && rollup -c && cp manifest.json LICENSE dist/ && (cd dist && zip -r bibtube.zip .)"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.2",
+    "rollup": "^4.16.7",
+    "tslib": "^2.8.1",
+    "typescript": "^5.4.5"
+  }
+}
