@@ -4,11 +4,17 @@
   "description": "BibTeX generator for YouTube watch pages",
   "scripts": {
     "clean": "rm -rf dist extension.zip",
-    "build": "npm run clean && rollup -c && cp manifest.json LICENSE dist/ && cp -r src/options/popup.html dist/options/ && (cd dist && zip -r bibtube.zip .)"
+    "build": "npm run clean && rollup -c && cp manifest.json LICENSE dist/ && cp -r src/options/popup.html dist/options/ && (cd dist && zip -r bibtube.zip .)",
+    "test": "jest"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0",
+    "jsdom": "^26.1.0",
     "rollup": "^4.16.7",
+    "ts-jest": "^29.4.0",
     "tslib": "^2.8.1",
     "typescript": "^5.4.5"
   }

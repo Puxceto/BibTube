@@ -2,6 +2,7 @@ import { formatBibTeX, BibData, FormatOptions } from '../lib/bibtex';
 import { formatTime } from '../lib/time';
 import { createMiniToggle } from './miniToggle';
 import { showToast } from './toast';
+import { push as pushHistory } from '../history/historyManager';
 
 declare const chrome: any;
 
@@ -67,6 +68,7 @@ async function main() {
     }
     const opts = await getFormatOptions();
     const entry = formatBibTeX(data, opts);
+    await pushHistory(entry);
     navigator.clipboard.writeText(entry).then(() => {
       showToast('Copied!');
     });
