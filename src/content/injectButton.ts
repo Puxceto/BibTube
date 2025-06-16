@@ -1,6 +1,9 @@
-import { formatBibTeX, BibData } from '../lib/bibtex';
+import { formatBibTeX, BibData, FormatOptions } from '../lib/bibtex';
 import { formatTime } from '../lib/time';
 import { createMiniToggle } from './miniToggle';
+import { showToast } from './toast';
+
+declare const chrome: any;
 
 function createButton() {
   const btn = document.createElement('button');
@@ -32,10 +35,25 @@ function getBibData(): BibData {
   return { title, channel, year, url: location.href };
 }
 
+function getFormatOptions(): Promise<FormatOptions> {
+  return new Promise(resolve => {
+    if (chrome?.storage?.local) {
+      chrome.storage.local.get(['biblatexMode', 'includeAccessDate'], (res: any) => {
+        resolve({
+          biblatex: !!res.biblatexMode,
+          includeAccessDate: res.includeAccessDate !== false
+        });
+      });
+    } else {
+      resolve({ biblatex: false, includeAccessDate: true });
+    }
+  });
+}
+
 async function main() {
   const toggle = await createMiniToggle();
   const btn = createButton();
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', async () => {
     const data = getBibData();
     if (toggle.checked) {
       const video = document.querySelector('video') as HTMLVideoElement | null;
@@ -47,9 +65,10 @@ async function main() {
         data.note = `Time = ${formatTime(sec)}`;
       }
     }
-    const entry = formatBibTeX(data);
+    const opts = await getFormatOptions();
+    const entry = formatBibTeX(data, opts);
     navigator.clipboard.writeText(entry).then(() => {
-      alert('Copied!');
+      showToast('Copied!');
     });
   });
   document.body.appendChild(btn);

@@ -1,3 +1,5 @@
+import { escapeLatex } from './escapeLatex';
+
 export interface BibData {
   title: string;
   channel: string;
@@ -6,32 +8,28 @@ export interface BibData {
   note?: string;
 }
 
-const latexMap: Record<string, string> = {
-  '\\': '\\textbackslash{}',
-  '{': '\\{',
-  '}': '\\}',
-  '%': '\\%',
-  '&': '\\&',
-  '$': '\\$',
-  '#': '\\#',
-  '_': '\\_',
-  '^': '\\^{}',
-  '~': '\\~{}'
-};
-
-export function escapeLaTeX(str: string): string {
-  return str.replace(/[\\{}%&$#_^~]/g, ch => latexMap[ch] || ch);
+export interface FormatOptions {
+  biblatex?: boolean;
+  includeAccessDate?: boolean;
 }
 
-export function formatBibTeX(data: BibData): string {
+export function formatBibTeX(data: BibData, options: FormatOptions = {}): string {
   const key = data.title.toLowerCase().replace(/\W+/g, '-').slice(0, 20) || 'video';
+  const biblatex = !!options.biblatex;
+  const includeAccess = options.includeAccessDate !== false;
   let entry = `@online{${key},\n` +
-    `  title = {${escapeLaTeX(data.title)}},\n` +
+    `  title = {${escapeLatex(data.title)}},\n` +
     `  year = {${data.year}},\n` +
     `  url = {${data.url}},\n` +
-    `  author = {${escapeLaTeX(data.channel)}}`;
+    `  author = {${escapeLatex(data.channel)}}`;
+  if (includeAccess) {
+    const field = biblatex ? 'dateaccessed' : 'urldate';
+    const today = new Date().toISOString().split('T')[0];
+    entry += `,\n  ${field} = {${today}}`;
+  }
   if (data.note) {
-    entry += `,\n  note = {${escapeLaTeX(data.note)}}`;
+    const field = biblatex ? 'addendum' : 'note';
+    entry += `,\n  ${field} = {${escapeLatex(data.note)}}`;
   }
   entry += `\n}`;
   return entry;

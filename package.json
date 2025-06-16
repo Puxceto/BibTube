@@ -4,7 +4,7 @@
   "description": "BibTeX generator for YouTube watch pages",
   "scripts": {
     "clean": "rm -rf dist extension.zip",
-    "build": "npm run clean && rollup -c && cp manifest.json LICENSE dist/ && (cd dist && zip -r bibtube.zip .)"
+    "build": "npm run clean && rollup -c && cp manifest.json LICENSE dist/ && cp -r src/options/popup.html dist/options/ && (cd dist && zip -r bibtube.zip .)"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
