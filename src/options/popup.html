@@ -3,9 +3,24 @@
 <head>
   <meta charset="utf-8">
   <script src="popup.js" defer></script>
+  <script src="historyTab.js" defer></script>
+  <script src="download.js" defer></script>
+  <style>
+    #historyTab { display: none; }
+  </style>
 </head>
 <body>
-  <label><input type="checkbox" id="biblatex"> BibLaTeX mode</label><br>
-  <label><input type="checkbox" id="access"> Include access date</label>
+  <nav>
+    <button id="optBtn">Options</button>
+    <button id="histBtn">History</button>
+    <button id="download">Download .bib</button>
+  </nav>
+  <div id="optionsTab">
+    <label><input type="checkbox" id="biblatex"> BibLaTeX mode</label><br>
+    <label><input type="checkbox" id="access"> Include access date</label>
+  </div>
+  <div id="historyTab">
+    <ul id="historyList"></ul>
+  </div>
 </body>
 </html>

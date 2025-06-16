@@ -18,5 +18,23 @@ export default [
       sourcemap: false
     },
     plugins: [typescript({ target: 'ES2022', rootDir: 'src', outDir: 'dist' })]
+  },
+  {
+    input: 'src/options/historyTab.ts',
+    output: {
+      file: 'dist/options/historyTab.js',
+      format: 'iife',
+      sourcemap: false
+    },
+    plugins: [typescript({ target: 'ES2022', rootDir: 'src', outDir: 'dist' })]
+  },
+  {
+    input: 'src/options/download.ts',
+    output: {
+      file: 'dist/options/download.js',
+      format: 'iife',
+      sourcemap: false
+    },
+    plugins: [typescript({ target: 'ES2022', rootDir: 'src', outDir: 'dist' })]
   }
 ];
