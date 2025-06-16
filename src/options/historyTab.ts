@@ -1,7 +1,5 @@
 import { list } from '../history/historyManager';
 
-declare const chrome: any;
-
 const optBtn = document.getElementById('optBtn') as HTMLButtonElement;
 const histBtn = document.getElementById('histBtn') as HTMLButtonElement;
 const optionsTab = document.getElementById('optionsTab') as HTMLElement;

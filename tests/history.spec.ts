@@ -1,7 +1,5 @@
 import { push, list, clear } from '../src/history/historyManager';
 
-declare const chrome: any;
-
 class MemStore {
   data: Record<string, any> = {};
   get(keys: string[], cb: (res: any) => void) {
