@@ -44,7 +44,16 @@ function createButton() {
 
 function getBibData(): BibData {
   const titleMeta = document.querySelector('meta[name="title"]') as HTMLMetaElement | null;
-  const title = titleMeta?.content || document.title.replace(/ - YouTube$/, '');
+  let title = titleMeta?.content || document.title.replace(/ - YouTube$/, '');
+  try {
+    title = decodeURIComponent(title);
+  } catch {
+    // ignore decoding errors
+  }
+  if (!title) {
+    const titleEl = document.querySelector('h1 yt-formatted-string');
+    title = (titleEl?.textContent || '').trim();
+  }
 
   const channelEl = document.querySelector('ytd-channel-name a');
   const channel = (channelEl?.textContent || '').trim();
